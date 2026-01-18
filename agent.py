@@ -1,3 +1,4 @@
+import os
 import torch
 import random
 import numpy as np
@@ -14,10 +15,13 @@ class Agent:
 
     def __init__(self):
         self.n_games = 0
-        self.epsilon = 0 # randomness
+        self.epsilon = 0
         self.gamma = 0.9 # discount rate
         self.memory = deque(maxlen=MAX_MEMORY) # popleft()
         self.model = Linear_QNet(11, 256, 3)
+        #model_path = os.path.join('./model', 'modelVer1.pth')
+        #if os.path.exists(model_path):
+            #self.model.load_state_dict(torch.load(model_path, map_location='cpu'))
         self.trainer = QTrainer(self.model, lr=LR, gamma=self.gamma)
 
 
@@ -35,23 +39,24 @@ class Agent:
 
         state = [
             # Danger straight
-            (dir_r and game.is_collision(point_r)) or 
-            (dir_l and game.is_collision(point_l)) or 
-            (dir_u and game.is_collision(point_u)) or 
-            (dir_d and game.is_collision(point_d)),
+            (dir_r and game.is_boundary_collision(point_r) or game.is_snake_collision(point_r)) or
+            (dir_l and game.is_boundary_collision(point_l) or game.is_snake_collision(point_l)) or
+            (dir_r and game.is_boundary_collision(point_u) or game.is_snake_collision(point_u)) or
+            (dir_l and game.is_boundary_collision(point_d) or game.is_snake_collision(point_d)),
 
             # Danger right
-            (dir_u and game.is_collision(point_r)) or 
-            (dir_d and game.is_collision(point_l)) or 
-            (dir_l and game.is_collision(point_u)) or 
-            (dir_r and game.is_collision(point_d)),
+            (dir_u and game.is_boundary_collision(point_r) or game.is_snake_collision(point_r)) or
+            (dir_d and game.is_boundary_collision(point_l) or game.is_snake_collision(point_l)) or
+            (dir_l and game.is_boundary_collision(point_u) or game.is_snake_collision(point_u)) or
+            (dir_r and game.is_boundary_collision(point_d) or game.is_snake_collision(point_d)),
+
 
             # Danger left
-            (dir_d and game.is_collision(point_r)) or 
-            (dir_u and game.is_collision(point_l)) or 
-            (dir_r and game.is_collision(point_u)) or 
-            (dir_l and game.is_collision(point_d)),
-            
+            (dir_d and game.is_boundary_collision(point_r) or game.is_snake_collision(point_r)) or
+            (dir_u and game.is_boundary_collision(point_l) or game.is_snake_collision(point_l)) or
+            (dir_r and game.is_boundary_collision(point_u) or game.is_snake_collision(point_u)) or
+            (dir_l and game.is_boundary_collision(point_d) or game.is_snake_collision(point_d)),
+
             # Move direction
             dir_l,
             dir_r,
