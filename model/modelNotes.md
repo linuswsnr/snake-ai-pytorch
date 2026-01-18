@@ -1,3 +1,5 @@
+## Model Versions and Reward/State Experiments (Snake RL)
+
 ### modelVer1
 
 default configuration from forked repository
@@ -29,17 +31,32 @@ evaluation: basically similar results
 
 observation: modelVer1 and modelVer4 both seem to be kind of intelligent but sometimes they steer the sneak into dead ends. Sometimes there is enough space (2 or more lines) that the snake is able to get out but it seems to be randomly. 
 
-possible approach: Define a "danger state" which indicates a dead end with one line. See example below. Snake is marked with x and O is the head of the Snake. First example is a dead end which ends the game if the snake turns right. Second is also a dead but the snake would be able to get out if it turns right.
+possible approach: Define a "danger state" which indicates dead ends with one line.
 
+Why should be dead ends with one line a danger state?
+See examples below. Snake is marked with S and H while H is the head of the Snake. First example is a dead end which ends the game if the snake turns right. Second is also a dead end but the snake would be able to get out if it. Also available space will be used efficiently.
+
+```text
 Example 1:
-xxxxxxxxxxxx
-....O......x
-....xxxxxxxx
 
-Example 2;
-xxxxxxxxxxxx
-...........x
-....O......x
-....xxxxxxxx
+####################
+#      SSSSSSSSSS  #
+#        H      S  #
+#        SSSSSSSS  #
+#                  #
+#                  #
+####################
+
+Example 2:
+
+####################
+#      SSSSSSSSSS  #
+#               S  #
+#        H      S  #
+#        SSSSSSSS  #
+#                  #
+####################
+
+````
 
 turning right in example 1 ends the game, while turning right in example 2 doesnt and it efficiently uses available space
